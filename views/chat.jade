@@ -1,0 +1,24 @@
+extends layout
+
+block content
+	h1 #{room.name}'s Chat Room
+	input(type='hidden', id='roomid', value=room.id)
+
+	#chat-wrapper
+		#chat-window.border
+			ul(class='list-group', id='chat-list')
+				each msg in room.messages
+					li(class='list-group-item')
+						strong
+							a(href='/users/p/' + msg.user_id + '/') #{msg.user_name}: 
+						span #{msg.message}
+		form(id='chat-form')
+			input(type='text', name='message', id='message', class='form-control')
+
+block js
+	script(
+		src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js'
+	)
+	script(
+		src='/javascripts/chat.js'
+	)

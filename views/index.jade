@@ -1,0 +1,11 @@
+extends layout
+
+block content
+	.container
+		if (succ)
+			div(class='p-3 mb-2 bg-success text-white')= succ
+		if (err)
+			div(class='p-3 mb-2 bg-danger text-white')= err
+		.jumbotron
+			h1.text-center Welcome to WebChat2
+			p.lead(class='text-center') WebChat2 is a real-time web chat app for talking with friends, family, and colleagues!

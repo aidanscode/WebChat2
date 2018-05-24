@@ -1,0 +1,25 @@
+html, body, main, #app {
+	height: 100%;
+}
+
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+#chat-wrapper {
+	height: 95%;
+}
+
+#chat-window {
+	height: 90%;
+	overflow: auto;
+}
+
+#chat-form {
+	height: 10%;
+}

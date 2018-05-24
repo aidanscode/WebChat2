@@ -1,0 +1,37 @@
+nav(class='navbar navbar-expand-md fixed-top navbar-dark bg-dark navbar-laravel')    
+    .container
+        a(class='navbar-brand', href='/') WebChat2
+        button(
+            class='navbar-toggler',
+            type='button',
+            data-toggle='collapse',
+            data-target='#navbarSupportedContent',
+            aria-controls='navbarSupportedContent',
+            aria-expanded='false',
+            aria-label='Toggle navigation'
+        )
+            span(class='navbar-toggler-icon')
+
+        div(class='collapse navbar-collapse', id='navbarSupportedContent')
+            //- Left side of navbar
+            //- ul(class='navbar-nav mr-auto')
+
+            //-Right side of navbar
+            ul(class='navbar-nav ml-auto')
+                if (acc)
+                    li(class='nav-item dropdown')
+                        a(id='navbarDropdown', class='nav-link dropdown-toggle', href='#', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false', v-pre)
+                            span= acc.name
+                            span(class='caret')
+
+                        .dropdown-menu(aria-labelledby='navbarDropdown')
+                            a(class='dropdown-item', href='/chat/' + acc.id) My Chat Page
+                            a(class='dropdown-item', href='/users/p/' + acc.id) My Profile
+                            a(class='dropdown-item', href='/users/logout', onclick='event.preventDefault(); document.getElementById("logout-form").submit();') Log Out
+                        form(id='logout-form', action='/users/logout', method='POST', style='display: none;')
+                            input(type='hidden', name='_csrf', value=csrfToken)
+                else
+                    li(class='nav-item')
+                        a(class='nav-link', href='/users/login') Login
+                    li
+                        a(class='nav-link', href='/users/register') Register

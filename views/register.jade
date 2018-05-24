@@ -1,0 +1,38 @@
+extends layout
+
+block content
+	.container
+		div(class='row justify-content-center')
+			.col-md-8
+				if err
+					div(class='p-3 mb-2 bg-danger text-white')= err
+				.card
+					.card-header Register
+					.card-body
+						form(method='POST', action='/users/register')
+							input(type='hidden', name='_csrf', value=csrfToken)
+							div(class='form-group row')
+								label(for='email', class='col-sm-4 col-form-label text-md-right') E-Mail Address
+								.col-md-6
+									input(id='email', type='email', class='form-control', name='email', required, autofocus)
+
+							div(class='form-group row')
+								label(for='name', class='col-sm-4 col-form-label text-md-right') Username
+								.col-md-6
+									input(id='name', type='text', class='form-control', name='name', required)
+
+							div(class='form-group row')
+								label(for='password', class='col-sm-4 col-form-label text-md-right') Password
+								.col-md-6
+									input(id='password', type='password', class='form-control', name='password', required)
+
+							div(class='form-group row')
+								label(for='password2', class='col-sm-4 col-form-label text-md-right') Password (Confirm)
+								.col-md-6
+									input(id='password2', type='password', class='form-control', name='password2', required)
+
+							div(class='form-group row mb-0')
+								div(class='col-md-8 offset-md-4')
+									input(type='submit', class='btn btn-primary')
+									a(class='btn btn-link', href='/users/login') Already have an account?
+
