@@ -22,10 +22,10 @@ router.post('/login', function(req, res, next) {
 	}
 
 	var MyAppModel = mysqlModel.createConnection({
-		host: 'localhost',
-		user: 'root',
-		pass: '',
-		database: 'web_chat_2'
+		host: process.env.DBHOST || 'localhost',
+		user: process.env.DBUSER || 'root',
+		pass: process.env.DBPASS || '',
+		database: process.env.DBNAME || ''
 	});
 
 	var User = MyAppModel.extend({
@@ -96,10 +96,10 @@ router.post('/register', function(req, res, next) {
 	}
 
 	var MyAppModel = mysqlModel.createConnection({
-		host: 'localhost',
-		user: 'root',
-		pass: '',
-		database: 'web_chat_2'
+		host: process.env.DBHOST || 'localhost',
+		user: process.env.DBUSER || 'root',
+		pass: process.env.DBPASS || '',
+		database: process.env.DBNAME || ''
 	});
 
 	User = MyAppModel.extend({
