@@ -6,6 +6,7 @@ var logger = require('morgan');
 var bodyParser = require('body-parser');
 var session = require("express-session");
 var csrf = require('express-csurf');
+var helmet = require('helmet');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -33,6 +34,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(app.sessionMiddleware);
 app.use(csrfProtection);
+app.use(helmet());
 
 app.use(function(req, res, next) {
   //send csrf token to view
