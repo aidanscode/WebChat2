@@ -22,10 +22,10 @@ router.post('/login', function(req, res, next) {
 	}
 
 	var MyAppModel = mysqlModel.createConnection({
-		host: process.env.DBHOST || 'localhost',
-		user: process.env.DBUSER || 'root',
-		pass: process.env.DBPASS || '',
-		database: process.env.DBNAME || ''
+		host: process.env.DB_HOST || 'localhost',
+		user: process.env.DB_USER || 'root',
+		pass: process.env.DB_PASS || '',
+		database: process.env.DB_NAME || ''
 	});
 
 	var User = MyAppModel.extend({
@@ -96,10 +96,10 @@ router.post('/register', function(req, res, next) {
 	}
 
 	var MyAppModel = mysqlModel.createConnection({
-		host: process.env.DBHOST || 'localhost',
-		user: process.env.DBUSER || 'root',
-		pass: process.env.DBPASS || '',
-		database: process.env.DBNAME || ''
+		host: process.env.DB_HOST || 'localhost',
+		user: process.env.DB_USER || 'root',
+		pass: process.env.DB_PASS || '',
+		database: process.env.DB_NAME || ''
 	});
 
 	User = MyAppModel.extend({
@@ -107,8 +107,8 @@ router.post('/register', function(req, res, next) {
 	});
 
 	user = new User();
-	user.find('count', {where: 'email = ' + mysql.escape(req.body.email)}, function(err, result) {
-		if (result > 0) {
+	user.find('count', {where: "email = " + mysql.escape(req.body.email)}, function(err, result) {
+		if (err || result > 0) {
 			req.session.err = 'There is already a user with this email address!';
 			res.redirect('/users/register');
 			return;
@@ -138,7 +138,6 @@ router.post('/register', function(req, res, next) {
 				res.redirect('/');
 			});
 		});
-
 	});
 });
 
