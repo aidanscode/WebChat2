@@ -24,7 +24,7 @@ router.post('/login', function(req, res, next) {
 	var MyAppModel = mysqlModel.createConnection({
 		host: process.env.DB_HOST || 'localhost',
 		user: process.env.DB_USER || 'root',
-		pass: process.env.DB_PASS || '',
+		password: process.env.DB_PASS || '',
 		database: process.env.DB_NAME || ''
 	});
 
@@ -96,10 +96,10 @@ router.post('/register', function(req, res, next) {
 	}
 
 	var MyAppModel = mysqlModel.createConnection({
-		host: process.env.DB_HOST || 'localhost',
-		user: process.env.DB_USER || 'root',
-		pass: process.env.DB_PASS || '',
-		database: process.env.DB_NAME || ''
+		host     : process.env.DB_HOST || 'localhost',
+		user     : process.env.DB_USER || 'root',
+		password : process.env.DB_PASS || '',
+		database : process.env.DB_NAME || '',
 	});
 
 	User = MyAppModel.extend({
@@ -107,7 +107,7 @@ router.post('/register', function(req, res, next) {
 	});
 
 	user = new User();
-	user.find('count', {where: "email = " + mysql.escape(req.body.email)}, function(err, result) {
+	user.find('count', {where: "email = " + mysql.escape(req.body.email)}, function(err, result, fields) {
 		if (err || result > 0) {
 			req.session.err = 'There is already a user with this email address!';
 			res.redirect('/users/register');
