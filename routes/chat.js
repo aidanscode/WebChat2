@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 
 var mysql = require('mysql');
-var mysqlModel = require('mysql-model');
 var utils = require('utils');
 
 router.get('/:id', function(req, res, next) {

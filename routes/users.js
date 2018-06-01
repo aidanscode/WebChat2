@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var crypto = require('crypto');
 var mysql = require('mysql');
-var mysqlModel = require('mysql-model');
 var validator = require('validator');
 var utils = require('utils');
 
@@ -21,19 +20,15 @@ router.post('/login', function(req, res, next) {
 		return;
 	}
 
-	var MyAppModel = mysqlModel.createConnection({
+	var connection = mysql.createConnection({
 		host: process.env.DB_HOST || 'localhost',
 		user: process.env.DB_USER || 'root',
 		password: process.env.DB_PASS || '',
 		database: process.env.DB_NAME || ''
 	});
 
-	var User = MyAppModel.extend({
-	  tableName: 'users',
-	});
-
-	user = new User();
-	user.find('all', {where: 'email = ' + mysql.escape(req.body.email)}, function(err, rows, fields) {
+	//user.find('all', {where: 'email = ' + mysql.escape(req.body.email)}, function(err, rows, fields) {
+	connection.query('SELECT * FROM users WHERE email = ?', [req.body.email], function(err, rows, fields) {
 		if (err || rows.length == 0) {
 			req.session.err = 'Incorrect email address or password!';
 			res.redirect('/users/login');
@@ -95,20 +90,15 @@ router.post('/register', function(req, res, next) {
 		return;
 	}
 
-	var MyAppModel = mysqlModel.createConnection({
-		host     : process.env.DB_HOST || 'localhost',
-		user     : process.env.DB_USER || 'root',
-		password : process.env.DB_PASS || '',
-		database : process.env.DB_NAME || '',
+	var connection = mysql.createConnection({
+		host: process.env.DB_HOST || 'localhost',
+		user: process.env.DB_USER || 'root',
+		password: process.env.DB_PASS || '',
+		database: process.env.DB_NAME || ''
 	});
 
-	User = MyAppModel.extend({
-	  tableName: 'users',
-	});
-
-	user = new User();
-	user.find('count', {where: "email = " + mysql.escape(req.body.email)}, function(err, result, fields) {
-		if (err || result > 0) {
+	connection.query('SELECT COUNT(*) as num FROM users WHERE email = ?', [req.body.email], function(err, rows, fields) {
+		if (err || rows[0].num > 0) {
 			req.session.err = 'There is already a user with this email address!';
 			res.redirect('/users/register');
 			return;
@@ -122,19 +112,24 @@ router.post('/register', function(req, res, next) {
 			digest = 'sha512';
 
 		crypto.pbkdf2(password, salt, iterations, keylen, digest, function(err, derivedKey) {
-			user = new User({
+			user = {
 				email: req.body.email,
 				name: req.body.name,
 				password: derivedKey.toString('hex'),
 				salt: salt,
-			});
-			user.save();
+			};
 
-			//query again bc we don't have the user id in the user variable after saving it
-			user.find('first', {where: 'email = ' + mysql.escape(req.body.email)}, function(err, row) {
-				req.session.acc = row;
+			connection.query('INSERT INTO users SET ?', user, function(err, results, fields) {
+				 //add user ID to saved user data
+				user.id = results.insertId;
+
+				//save user data to session
+				req.session.acc = user;
+
+				//give user success message
 				req.session.succ = 'You have successfully registered your account!';
 
+				//redirect
 				res.redirect('/');
 			});
 		});
